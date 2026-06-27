@@ -1,0 +1,35 @@
+# Central configuration for the trading desk.
+# Phases read the pieces they need; everything is here so the GUI can surface it.
+
+# Symbols the desk watches. Crypto uses ccxt notation (BASE/QUOTE),
+# equities/ETFs use the plain ticker (resolved via yfinance).
+universe:
+  crypto:
+    - BTC/USD
+    - ETH/USD
+  equities:
+    - AAPL
+    - SPY
+
+# Data layer
+data:
+  crypto_exchange: kraken       # ccxt exchange id (kraken is US-reachable; binance is not)
+  default_timeframe: 1h
+  cache_dir: data               # parquet cache location
+
+# Agent / model selection (Claude Agent SDK)
+model:
+  analysts: claude-sonnet-4-6   # cheaper/faster for the parallel analyst agents
+  decision: claude-opus-4-8     # stronger model for risk + portfolio-manager calls
+
+# Risk limits (enforced in Python, not by the LLM) — used from Phase 5
+risk:
+  starting_cash: 100000         # paper account starting balance (USD)
+  max_position_pct: 0.20        # max % of equity in one symbol
+  per_trade_risk_pct: 0.01      # risk 1% of equity per trade (sizes by ATR stop)
+  max_drawdown_halt_pct: 0.20   # halt all trading if equity drops 20% from peak
+
+# Execution
+execution:
+  mode: paper                   # paper | live
+  schedule_minutes: 60          # how often the desk runs a decision cycle

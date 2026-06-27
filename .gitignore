@@ -1,0 +1,17 @@
+# Secrets — never commit
+.env
+.streamlit/secrets.toml
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Data cache (regenerable)
+data/*.parquet
+
+# Run artifacts: the JSON decision logs + desk_state ARE committed so the cloud
+# viewer has data to show (pushed by sync.sh). Only these transient files are ignored:
+runs/KILL_SWITCH
+runs/streamlit.log

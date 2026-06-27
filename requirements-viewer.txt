@@ -1,0 +1,12 @@
+# Lean dependencies for the ALWAYS-ON, READ-ONLY cloud viewer (DESK_VIEWER_MODE=1).
+# The viewer only reads runs/*.json — it never runs agents — so the Claude Agent SDK,
+# anthropic, and Node are intentionally excluded. No ANTHROPIC_API_KEY is needed in the cloud.
+streamlit>=1.33.0
+plotly>=5.20.0
+pandas>=2.0.0
+pyarrow>=14.0.0
+pydantic>=2.6.0
+python-dotenv>=1.0.0
+PyYAML>=6.0
+ccxt>=4.0.0          # only used if a held position needs a live mark; safe to keep
+yfinance>=0.2.40

@@ -1,0 +1,17 @@
+# --- Phase 0 (core: agent + data + schemas) ---
+claude-agent-sdk>=0.1.0      # Claude Agent SDK: @tool, create_sdk_mcp_server, query
+anthropic>=0.40.0            # underlying Anthropic API client
+ccxt>=4.0.0                  # open-source crypto exchange data (and later live execution)
+yfinance>=0.2.40            # open-source equities/ETF/FX data
+pandas>=2.0.0
+pyarrow>=14.0.0             # parquet cache for bars
+pydantic>=2.6.0             # typed agent contracts (Signal, Order, ...)
+python-dotenv>=1.0.0        # load .env (ANTHROPIC_API_KEY)
+PyYAML>=6.0                 # config/settings.yaml
+
+# --- Phase 2+ (indicators) ---
+# pandas-ta pins are added in Phase 2 (it needs numpy<2); deferred to keep Phase 0 clean.
+
+# --- Phase 7 (GUI) ---
+streamlit>=1.33.0
+plotly>=5.20.0              # interactive equity curve / candlesticks in the GUI
