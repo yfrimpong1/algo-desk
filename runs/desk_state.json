@@ -1,0 +1,21 @@
+{
+  "portfolio": {
+    "cash": 100000,
+    "starting_cash": 100000,
+    "positions": {},
+    "peak_equity": 100000
+  },
+  "processed_order_ids": [],
+  "pending_approvals": [],
+  "equity_history": [
+    {
+      "t": "2026-06-27T18:47:57.153341+00:00",
+      "equity": 100000
+    },
+    {
+      "t": "2026-06-27T18:56:53.963711+00:00",
+      "equity": 100000
+    }
+  ],
+  "fills": []
+}

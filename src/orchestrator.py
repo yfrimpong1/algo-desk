@@ -41,7 +41,12 @@ async def run_cycle(symbols: list[str] | None = None, state: DeskState | None = 
 
     cycle_prices: dict[str, float] = {}
     for sym in symbols:
-        dec = await decide(sym, state.portfolio)
+        # One symbol's failure must not abort the whole cycle (autonomous resilience).
+        try:
+            dec = await decide(sym, state.portfolio)
+        except Exception as e:
+            print(f"\n[{sym}] SKIPPED — decision failed: {type(e).__name__}: {str(e)[:140]}")
+            continue
         cycle_prices[sym] = dec.price
         action = dec.order.side.value.upper() if dec.order else "HOLD"
         print(f"\n[{sym}] proposed={dec.proposed_direction.upper()} "

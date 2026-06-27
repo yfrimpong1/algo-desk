@@ -135,14 +135,26 @@ ANALYSTS = {
 
 
 async def run_all_analysts(symbol: str, verbose: bool = False) -> list[Signal]:
-    """Fan out all three analysts in parallel; return their Signals."""
+    """Fan out all three analysts in parallel; return their Signals.
+
+    Resilient by design: if one analyst errors (e.g. a transient SDK/CLI hiccup), it degrades
+    to a neutral HOLD signal instead of crashing the cycle. The desk keeps running on the
+    remaining analysts' evidence.
+    """
     results: dict[str, Signal] = {}
 
     async def _one(name: str, cfg: dict):
-        results[name] = await run_analyst(
-            symbol, name=name, system_prompt=cfg["system_prompt"],
-            data_tools=cfg["data_tools"], verbose=verbose,
-        )
+        try:
+            results[name] = await run_analyst(
+                symbol, name=name, system_prompt=cfg["system_prompt"],
+                data_tools=cfg["data_tools"], verbose=verbose,
+            )
+        except Exception as e:  # transient API/CLI error -> neutral, never crash the group
+            print(f"  [analyst:{name}] failed for {symbol}: {type(e).__name__}: {str(e)[:120]}")
+            results[name] = Signal(
+                symbol=symbol, direction=Direction.HOLD, confidence=0.0,
+                rationale=f"Analyst unavailable ({type(e).__name__}).", analyst=name,
+            )
 
     async with anyio.create_task_group() as tg:
         for name, cfg in ANALYSTS.items():
