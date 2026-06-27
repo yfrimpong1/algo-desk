@@ -15,6 +15,11 @@ from __future__ import annotations
 import glob
 import json
 import os
+import sys
+
+# Make the repo root importable so `from src...` works regardless of launch directory.
+# (Streamlit Cloud runs from the repo root but does not add it to sys.path.)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import anyio
 import pandas as pd
